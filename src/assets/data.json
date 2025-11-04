@@ -1,0 +1,78 @@
+{
+  "revenue": {
+    "total": "30.2M",
+    "change": "+4.5%",
+    "changeType": "positive",
+    "description": "vs last month",
+    "subtitle": "Total revenue sejak September 2025",
+    "chartData": {
+      "labels": ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt"],
+      "revenue": [25, 35, 80, 65, 90, 55, 40, 30, 45, 35],
+      "expense": [20, 28, 65, 50, 70, 45, 32, 25, 35, 28]
+    }
+  },
+  "monthProgress": {
+    "percentage": 78,
+    "change": "+2.3%",
+    "subtitle": "Total dari September 2025",
+    "months": [
+      { "month": "September", "target": "45M", "progress": "5%" },
+      { "month": "Agustus", "target": "50M", "progress": "8%" },
+      { "month": "Juli", "target": "60M", "progress": "10%" },
+      { "month": "Juni", "target": "60M", "progress": "10%" },
+      { "month": "Mei", "target": "50M", "progress": "8%" },
+      { "month": "April", "target": "50M", "progress": "10%" },
+      { "month": "Maret", "target": "50M", "progress": "10%" },
+      { "month": "Februari", "target": "70M", "progress": "10%" },
+      { "month": "Januari", "target": "60M", "progress": "10%" }
+    ]
+  },
+  "receivables": {
+    "total": "3.2M",
+    "change": "-2.4%",
+    "changeType": "negative",
+    "description": "Decreased by",
+    "target": "3.42M",
+    "period": "Last 4 Month",
+    "chartData": {
+      "labels": ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt"],
+      "data": [15, 25, 20, 35, 30, 45, 40, 35, 30, 25]
+    }
+  },
+  "hutang": {
+    "total": "1.54M",
+    "change": "+3.2%",
+    "changeType": "positive",
+    "description": "vs last month",
+    "subtitle": "Total hutang September 2025",
+    "period": "Last 6 Month",
+    "chartData": {
+      "labels": ["Sep", "Okt", "Nov", "Des", "Jan", "Feb"],
+      "data": [45, 50, 48, 52, 49, 47]
+    }
+  },
+  "budgeting": {
+    "percentage": "87%",
+    "description": "Total Actual VS Budget",
+    "budget": "2.34M",
+    "actual": "1.34M",
+    "period": "Last 8 Month",
+    "chartData": {
+      "labels": ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu"],
+      "budget": [20, 25, 30, 35, 32, 38, 42, 45],
+      "actual": [15, 20, 22, 28, 30, 33, 36, 40]
+    }
+  },
+  "cashflow": {
+    "income": "1.2M",
+    "expenses": "1.1M",
+    "projection": "2.3M",
+    "period": "Jan - Sept 2025",
+    "chartData": {
+      "labels": ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu"],
+      "income": [25, 30, 28, 35, 38, 42, 40, 45],
+      "expenses": [20, 22, 25, 23, 28, 30, 32, 35],
+      "projection": [18, 20, 22, 24, 26, 28, 30, 32]
+    }
+  }
+}
