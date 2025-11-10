@@ -15,7 +15,24 @@
         <h1 class="main-title">TOP LEVEL<br>DASHBOARD</h1>
         <p class="subtitle">Finance Overview</p>
       </div>
-      
+
+      <!-- Create Chart Button -->
+      <button @click="openChartBuilder" class="create-chart-btn">
+        <span class="btn-icon">➕</span>
+        <span>Create New Chart</span>
+      </button>
+
+      <!-- Custom Charts -->
+      <div v-for="(chart, index) in customCharts" :key="chart.id" class="custom-chart-wrapper">
+        <DynamicChart 
+          :config="chart" 
+          @edit="editChart(index)"
+          @delete="deleteChart(index)"
+          @refresh="refreshChart(index)"
+        />
+      </div>
+
+      <!-- Static Charts (Original) -->
       <!-- Revenue Card -->
       <div class="card card-blue">
         <div class="card-header">
@@ -172,6 +189,14 @@
     </div>
     
     <BottomNav />
+
+    <!-- Chart Builder Modal -->
+    <ChartBuilder 
+      :isOpen="showChartBuilder"
+      :editChart="editingChart"
+      @close="closeChartBuilder"
+      @save="saveChart"
+    />
   </div>
 </template>
 
@@ -181,6 +206,8 @@ import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 import { useDashboardStore } from '@/stores/dashboard'
 import Header from '@/components/Header.vue'
 import BottomNav from '@/components/BottomNav.vue'
+import DynamicChart from '@/components/DynamicChart.vue'
+import ChartBuilder from '@/components/ChartBuilder.vue'
 
 Chart.register(...registerables)
 
@@ -188,7 +215,9 @@ export default {
   name: 'DashboardView',
   components: {
     Header,
-    BottomNav
+    BottomNav,
+    DynamicChart,
+    ChartBuilder
   },
   setup() {
     const store = useDashboardStore()
@@ -201,6 +230,12 @@ export default {
     const hutang = computed(() => store.hutang)
     const budgeting = computed(() => store.budgeting)
     const cashflow = computed(() => store.cashflow)
+    
+    // Chart Builder
+    const showChartBuilder = ref(false)
+    const editingChart = ref(null)
+    const editingIndex = ref(null)
+    const customCharts = ref(store.customCharts || [])
     
     // Chart Refs
     const revenueChart = ref(null)
@@ -220,8 +255,59 @@ export default {
     const nextDate = () => {
       store.updateDate('next')
     }
+
+    // Chart Builder Actions
+    const openChartBuilder = () => {
+      editingChart.value = null
+      editingIndex.value = null
+      showChartBuilder.value = true
+    }
+
+    const closeChartBuilder = () => {
+      showChartBuilder.value = false
+      editingChart.value = null
+      editingIndex.value = null
+    }
+
+    const saveChart = (chartConfig) => {
+      if (editingIndex.value !== null) {
+        // Update existing chart
+        customCharts.value[editingIndex.value] = {
+          ...chartConfig,
+          id: customCharts.value[editingIndex.value].id
+        }
+      } else {
+        // Add new chart
+        customCharts.value.push({
+          ...chartConfig,
+          id: Date.now()
+        })
+      }
+      
+      // Save to store
+      store.setCustomCharts(customCharts.value)
+      closeChartBuilder()
+    }
+
+    const editChart = (index) => {
+      editingChart.value = { ...customCharts.value[index] }
+      editingIndex.value = index
+      showChartBuilder.value = true
+    }
+
+    const deleteChart = (index) => {
+      if (confirm('Are you sure you want to delete this chart?')) {
+        customCharts.value.splice(index, 1)
+        store.setCustomCharts(customCharts.value)
+      }
+    }
+
+    const refreshChart = (index) => {
+      console.log('Refreshing chart:', index)
+      // Trigger re-fetch data for this chart
+    }
     
-    // Initialize Charts
+    // Initialize Static Charts
     const initCharts = () => {
       // Revenue Chart
       charts.revenue = new Chart(revenueChart.value, {
@@ -499,8 +585,57 @@ export default {
       budgetChart,
       cashflowChart,
       prevDate,
-      nextDate
+      nextDate,
+      showChartBuilder,
+      editingChart,
+      customCharts,
+      openChartBuilder,
+      closeChartBuilder,
+      saveChart,
+      editChart,
+      deleteChart,
+      refreshChart
     }
   }
 }
 </script>
+
+<style scoped>
+/* Create Chart Button */
+.create-chart-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #A4FF00 0%, #7FCC00 100%);
+  color: #000000;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(164, 255, 0, 0.3);
+}
+
+.create-chart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(164, 255, 0, 0.4);
+}
+
+.create-chart-btn:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  font-size: 20px;
+}
+
+/* Custom Chart Wrapper */
+.custom-chart-wrapper {
+  margin-bottom: 20px;
+}
+</style>
